@@ -20,7 +20,7 @@ export default class My extends Component {
   constructor(){
     super();
     this.state={
-      avatarSource: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
+      avatarSource: {uri:'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'}
     }
     
   }
@@ -42,12 +42,12 @@ export default class My extends Component {
     });
   }
   componentDidMount(){
-    AsyncStorage.getItem('imgpath',()=>{console.log('get success')})
+    AsyncStorage.getItem('imgpath')
       .then(res=>{
         if(res !== null){
           this.setState({avatarSource:JSON.parse(res)})
         }else{
-          this.setState({avatarSource:'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'})
+          this.setState({avatarSource:{uri:'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'}})
         }
       });
   }
@@ -56,7 +56,7 @@ export default class My extends Component {
       error?console.log('删除失败'):console.log('删除成功');
     })
       .then(()=>{
-        Actions.login();
+        Actions.replace('login');
       })
   }
   render() {

@@ -39,7 +39,6 @@ const App = () => {
       if(user&&user.token){
         setLogin(true);
         SplashScreen.hide();
-        console.log(res);
       }
       if(!user){
         SplashScreen.hide();
@@ -47,7 +46,6 @@ const App = () => {
       })
   }, [])
   let get=()=>{
-    console.log('after install');
     setInstall(false);
   }
   if(isInstall){
@@ -60,7 +58,7 @@ const App = () => {
       <StatusBar  backgroundColor="#f23030"/>
         <Router
            backAndroidHandler={()=>{
-             if(Actions.currentScene != 'homepage' && Actions.currentScene != 'login'){
+             if(Actions.currentScene != 'login' && Actions.currentScene != 'homepage'){
               Actions.pop();
               return true;
             }else{

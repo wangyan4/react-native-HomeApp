@@ -11,7 +11,9 @@ export default class Login extends Component {
     this.state={
       username:'',
       pwd:'',
-      isRegister:false
+      isRegister:false,
+      isNull:false,
+      isSame:false
     }
   }
   textChanged=(text,type)=>{
@@ -23,12 +25,21 @@ export default class Login extends Component {
     }
   }
   register=()=>{
-    this.setState({isRegister:true})
-    myFetch.post('login',{
+    if(this.state.username =="" || this.state.pwd==""){
+      this.setState({isNull:true});
+      return;
+    }else{
+      this.setState({isNull:false,isRegister:true})
+    }
+    myFetch.post('register',{
       username:this.state.username,
       pwd:this.state.pwd
     }).then(res=>{
-      console.log(res);
+      console.log(JSON.stringify(res.data))
+      if(res.data.errorcode=='2'){
+        this.setState({isSame:true});
+        return;
+      }
       AsyncStorage.setItem('user',JSON.stringify(res.data))
         .then(()=>{
           Actions.login();
@@ -55,7 +66,7 @@ export default class Login extends Component {
           </View>
         </View>
         {
-          this.state.isRegister ?<View><ActivityIndicator/><Text>正在注册...</Text></View> :<Text></Text>
+          this.state.isSame?<Text>用户名已被注册</Text>:this.state.isNull?<Text>用户名、密码不能为空</Text>:(this.state.isRegister ?<View><ActivityIndicator/><Text>正在注册...</Text></View> :<Text></Text>)
         }
       </View>
     )
@@ -102,7 +113,7 @@ const styles=StyleSheet.create({
   btn:{
     width:120,
     lineHeight:30,
-    backgroundColor:"#1F6BE0",
+    backgroundColor:"#f23030",
     color:"#fff",
     borderRadius:15,
     marginTop:10

@@ -97,7 +97,7 @@ const styles=StyleSheet.create({
   icon1:{
     color:"#fff",
     marginHorizontal:"5%",
-    marginTop:"2%",
+    textAlignVertical:"center",
     fontSize:28
   },
   // 轮播图

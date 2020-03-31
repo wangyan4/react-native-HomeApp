@@ -11,8 +11,17 @@ export default class Login extends Component {
     this.state={
       username:'',
       pwd:'',
-      isLoading:false
+      isLoading:false,
+      isNull:false
     }
+  }
+  componentWillReceiveProps(){
+    this.setState({
+      username:"",
+      pwd:"",
+      isLoading:false,
+      isNull:false
+    })
   }
   textChanged=(text,type)=>{
     if(type =='username'){
@@ -23,7 +32,12 @@ export default class Login extends Component {
     }
   }
   login=()=>{
-    this.setState({isLoading:true})
+    if(this.state.username =="" || this.state.pwd==""){
+      this.setState({isNull:true});
+      return;
+    }else{
+      this.setState({isNull:false,isLoading:true})
+    }
     myFetch.post('login',{
       username:this.state.username,
       pwd:this.state.pwd
@@ -34,7 +48,6 @@ export default class Login extends Component {
           Actions.root();
         })
     })
-    
   }
   render() {
     return (
@@ -42,12 +55,12 @@ export default class Login extends Component {
         <View style={styles.frontbox}>
           <View style={styles.grandcss}>
             <Icon style={styles.icon} name="user" size={25} color="red"/>
-            <TextInput style={styles.textinput} placeholder="用户名" onChangeText={text=>this.textChanged(text,'username')}/>
+            <TextInput style={styles.textinput} placeholder="用户名" defaultValue={this.state.username} onChangeText={text=>this.textChanged(text,'username')}/>
           </View>
 
           <View style={styles.grandcss}>
             <Icon style={styles.icon} name="lock" size={25} color="red"/>
-            <TextInput style={styles.textinput} placeholder="密码" secureTextEntry={true}  onChangeText={text=>this.textChanged(text,'pwd')}/>
+            <TextInput style={styles.textinput} placeholder="密码" secureTextEntry={true} defaultValue={this.state.pwd}  onChangeText={text=>this.textChanged(text,'pwd')}/>
           </View>
           
           <View style={styles.btns}>
@@ -56,7 +69,7 @@ export default class Login extends Component {
           </View>
         </View>
         {
-          this.state.isLoading ?<View><ActivityIndicator/><Text>正在登录...</Text></View> :<Text></Text>
+          this.state.isNull?<Text>用户名、密码不能为空</Text>:(this.state.isLoading ?<View><ActivityIndicator/><Text>正在登录...</Text></View> :<Text></Text>)
         }
       </View>
     )
@@ -103,7 +116,7 @@ const styles=StyleSheet.create({
   btn:{
     width:120,
     lineHeight:30,
-    backgroundColor:"#1F6BE0",
+    backgroundColor:"#f23030",
     color:"#fff",
     borderRadius:15,
     marginTop:10

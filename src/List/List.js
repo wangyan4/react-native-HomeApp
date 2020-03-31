@@ -67,6 +67,7 @@ export default class List extends Component {
               <Text style={styles.price}>36.00</Text>
             </View>
           </View>
+          <View style={{height:200}}></View>
         </ScrollView>
       </View>
     )
